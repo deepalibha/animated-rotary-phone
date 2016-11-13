@@ -1,0 +1,193 @@
+---
+title: "Capstone Project Report"
+author: "Deepali Bhatt"
+date: "November 12, 2016"
+output: word_document
+---
+'''{r import library}
+library(XML)
+library(methods)
+library (plyr)
+library(dplyr)
+library(magrittr)
+library(ggplot2)
+options(max.print=999999)
+
+'''  
+
+# Capstone Project Overview
+This capstone project is about more analysis into data scientist roles in India.This project was taken up by the need of a dear friend wanting to move to India in search of data scientist roles in India.When people want to move from overseas back to India, they do not do proper research into the job scene in regards with the role they are seeking a career in. Taking into consideration hundreds of job sites in India, with results running into hundreds of pages adds to the daunting taks of getting a holistic picture of a paricular job related market.People do not do enough research into, which companies are hiring for a data scientist position; what locations have the highest density of data scientists roles; what companies are hiring; what cities will likely hire in the future etc. When the above questions are not researched properly, immigrants are usually stuck at locations that does not hire for the respective roles, or does not need data scientists.  
+The aim of this project is to be able to make informed decisions about taking up data scientist roles and take a scientific approach towards it. To aid in this decision-making, I will be exploring data through descriptive statistics and visualisations making use of various statistical tools including but not limited to histograms, bar plots etc. For data visualisations, I will be using ggplot 2 to help understand the significance of data by placing it in visual context.  **The goal of this project is to apply the principles of data science and develop insights from the analysis of structured or unstructured data to aid in better decision-making.**  
+The data set was extracted using an open API for the website [Indeed] (www.indeed.com).  
+
+# Overview of the Data Files
+
+There is one master csv that was used, which is as following:
+ finalindeed1_trynote.csv
+The data set is acquired by getting an open API from indeed (job search website), searching for data scientist jobs from all over India. The data set has 10 variables and has over 1200 search results. Lets take a look at the variables in the dataset.
+
+
+
+# Methodology
+
+**Approach-Prelinimary Preparation**  
+Since the above mentioned questions were related to India, I was looking for an Indian job site. After identifying Naukri (www.naurkri.com) as the job site and emailing them, we had to drop it since it did not have an open API.During research of open API's and asking various forums, we identified Indeed (www.indeed.com) has an open API which required open an account with them.  
+After opening the account, A publisher key was identified which then had to be inserted in a URL given as an example in the Indeed website. Since Indeed has an Indian website (www.indeed.co.in) and the open API was for US (www.indeed.com) website, the output of the API with Indeed's Indian wesbite was was giving 0 results.The way I fixed it by reading the API documentation for parameters and was limiting the results to 10, whereas ther were thousands of result for "Data Scientist" job when I searched on the Indeed's search engine.In the API link URL string, various parameters like co had to be changed to 'in' and limit had to changed to an extreme number to accomodate the full results.Next steps is to write a program to extract all the data available and put in a format like excel to be mined further.  
+After the Indian job site results was saved in an XML site, I toyed with two codes to parse the XML data into the R as a dataframe. I used "xmlTreeParse" which gave a "NULL" and "NA" output. The second approach was to use "xmlToDataframe", which gave the error message as follows:  
+
+Error in `[<-.data.frame`(`*tmp*`, i, names(nodes[[i]]), value = c("Indian Council Of Medical Research (ICMR) Needs ScientistIndian Council of Medical Research (ICMR)INIndiaEmployment SamacharThu, 18 Aug 2016 16:16:15 GMTIndian Council Of Medical Research (ICMR) Needs Scientist. Indian Council of Medical Research (ICMR) invites applications to recruit on vacant posts of...http://www.indeed.co.in/viewjob?jk=20d1db3c7d973199&qd=704PFtVAS6xUi0-OukCaEmfxgGzxqabhMKv0iphFlwZvghJwQWAysomG7BsaL67IpeRHLNudzQ_v_UGEGMFYq0JvivwR6g0dNKs-MyZMxww&indpubnum=8693092939388569&atk=1arpjr78d5upddvtindeed_clk(this,'6618');20d1db3c7d973199falsefalsefalseIndia16 days ago",  : 
+  duplicate subscripts for columns  
+  
+**Change Of Approach**  
+After the above error message, I changed my approach.I had to extract data from the nodes which looked like <some data> by using "getNodetSet" and then had to combine them.AFter the above was done, the results would not come in respective columns and would come as a list and the heads would come as "Text 1" and so forth.The data is now in a dataframe, which means any column can be extracted, for example indeed_df['text'] gave me the first column.  
+To get all the 1197 results into these column heads, we had to run a "while" loop.There were 25 searches displayed on a single page. So for 1197 searches ,I would have to press "NEXT" (1197/25 = 48) times; therefore run the "while" loop 48 times. Ie had to define various other parameters like i and run it as a loop 48 times to cover the full job results and define i=1 and later on add a string 2 that would run 48 times (look at the code).Once the string was divided into small parts, I combined the all the three strings to get the full oputput.After this step, I exported the dataframe into a .csv file.  
+
+*Libraries Used In Prepration*  
+XML, methods, max.print
+
+
+**First Step:Data Import**   
+The first step was to import data from the open API which was in XML format and is read properly in the R Studio. For that I first created the file in R. After the data is read in the R studio. It is important to convert it in the data frame for analysis. Due to the HTML tagging, separate nodes were extracted using "getnodes".  Then the XMl file is parsed and a csv file is created.The structure of the indeedfile csv is below:
+
+```{r viewing initial indeed file}
+indeedfile <- read.csv("C:/Users/deepa/OneDrive/Documents/capstone csv/indeed1.csv")
+
+str(indeedfile)
+```
+**Second Step:Data Preparation**    
+*Adding the logic*- Now once the XML file is converted into dataframe and then to the csv, it is important to look for companies that have the three top skills "Python", "machine learning", "SQL". This was achieved by putting the logic of TRUE if the respective skills were found otherwise put FALSE and create separate columns with respective logical answer. Then these three columns were merged with the existing data file indeed1.csv and new csv file was named finalindeed1_trynote.csv.The finalindeed1_trynote had the following structure:
+
+```{r viewing trynote master indeed file}
+trynoteindeedfile <- read.csv("C:/Users/deepa/OneDrive/Documents/capstone csv/finalindeed1_trynote.csv")
+
+str(trynoteindeedfile)
+```
+
+For consistency purposes and to simplify analysis, I created another file that would lower the cases of every item in the table. The file structure all in lowercase is below:
+
+```{r view the lower case file}
+
+dflowerfinal1 <- read.csv("C:/Users/deepa/OneDrive/Documents/capstone csv/finaldflower.csv")
+str(dflowerfinal1)
+head(dflowerfinal1)
+```
+
+**Third Step: Data Wrangling**  
+
+*Libraries Used In Data Wrangling*  
+plyr, dplyr, magrittr, ggplot2
+
+
+Now that the data sheet is cleaned, it is time to start slicing the data and develop insights from it. To conduct analysis, we would now answer various questions that would give an indepth analysis of the data scientist job situation in India.Below are the questions:  
+
+__*Which states are hiring for data scientist roles?*__  
+To answer the above question, I looked at the data in the states column and looked for unique values. Once the unique values were identified, I found the frequency of each unique value and find out it's frequency.The file structure for state frequency is below:
+
+```{r view the str of states file}
+
+statesarranged <- read.csv("C:/Users/deepa/OneDrive/Documents/capstone csv/finalarrangedfrequencystate1.csv")
+str(statesarranged)
+head(statesarranged)
+```
+
+```{r}
+library(ggplot2)
+```
+
+
+Following is the barplot displaying the number of data scientist jobs in various states in India.
+
+```{r making barplot}
+statebarplot<- ggplot(data=statesarranged, aes(x=states, y=Frequencystates)) +
+  geom_bar(stat = "identity",fill= "yellow", colour= "blue")+
+  geom_text(aes(label=Frequencystates), vjust=-0.3, size=3.5)
+  statebarplot
+```
+
+  As you can see in the above that the states of ka(Karnataka), mh(Maharashtra), dl(Delhi) have the highest data scientist jobs in India. 
+
+__*Which cities are hiring for data scientist roles?*__  
+To answer the above question, I looked at the data in the cities column and looked for unique values. Once the unique values were identified, I found the frequency of each unique value.The file structure for state frequency is below:
+
+```{r view the str of cities file}
+
+citiesarranged <- read.csv("C:/Users/deepa/OneDrive/Documents/finalfreqcity.csv")
+str(citiesarranged)
+head(citiesarranged)
+```
+Following is the barplot displaying the number of data scientist jobs in various states in India.
+
+```{r making city barplot}
+citybarplot<- ggplot(data=citiesarranged, aes(x=cities, y=Frequencycities)) +
+  geom_bar(stat = "identity",fill= "green", colour= "blue")+
+  geom_text(aes(label=Frequencycities),vjust=-0.3, size=3.5) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  
+  citybarplot
+```
+    As you can see in the above that the cities of Bangalore, Delhi, Mumbai have the highest data scientist jobs in India. The findings of this data is consistent with the states data which recognised the respective states corresponsing to these cities as highest concentrated areas for data scientist jobs.
+
+  
+__*Which companies are hiring for data scientist roles?*__  
+To answer the above question, I looked at the data in the companies column and looked for unique values. Once the unique values were identified, I found the frequency of each unique value.
+
+
+
+```{r view the str of companies file}
+
+companiesarranged <- read.csv("C:/Users/deepa/OneDrive/Documents/capstone csv/finalarrangedfrequencycompany.csv")
+head(companiesarranged)
+```
+Following is the barplot displaying the number of data scientist jobs according to jobs posted in India on the Indeed website.
+
+```{r making company barplot of cities}
+companybarplot<- ggplot(data=companiesarranged, aes(x=Company, y=Frequencycompany)) +
+  geom_bar(stat = "identity",fill= "blue", colour= "yellow")+
+  geom_text(aes(label=Frequencycompany),vjust=-0.3, size=3.5)+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  companybarplot
+```
+
+**Text Analysis**    
+To answer the questions about non-technical skills needed for the data scientist role, I extracted the "snippet" column from the dataframe which consisted the job description including non-technical and technical skills.Then I chose Cran Mirror 50 which was closest to my location.Then I used "Bag of Words" approach to turn text into numeric.Preprocessing consisted of removing punctuations, stop words like "scienti","work", "are", "looking" etc. which were general to the use of the analysis.  
+
+*Libraries & Package Used in Text Analysis*  
+tm,SnowballC, caTools, Rpart, RcolorBrewer, wordcloud, biclust, cluster,igraph, fpc and used package "Tcampdf".
+
+
+
+  __*What non-technical skills does one need for a Data Scientist role in India?*__    
+To answer the above question, I resorted to mine the text available in the "snippet" column, which was originally the "job description" column. After pre-processing the data by removing numbers, punctuations and redundant words, I was able to generate a wordcloud. The wordcloud was coded (the code of which is available in the attached code).As you would notice that the words are truncated, I checked for this in the master file and the words are in the same format as in the original file. The wordcloud was saved as a png and is as follows:
+
+
+__*What technical skills does one need for a Data Scientist role in India?*__ 
+To answer the above questions, we created the code using "if else" , "logical condition" and dplyr "regex". We identified python, sql and machine learning as the three main technical skills. Using the 'if else' conditional statement and dplyr regular expression, we created the condition that if in the snippet column we see "python", "sql", "machine" make a respective column name python, sql and machine and print the logic "true" or "false". Then to identify the the companies who require all the technical skills, used the pipe function to filter the columns that have "true" in all the columns python, sql and machine.The following is the structure of the technical skills file.
+
+```{r viewing technical skills file}
+alltechnicalskills <-read.csv("C:/Users/deepa/OneDrive/Documents/technicalskills1.csv")
+str(alltechnicalskills)
+head(alltechnicalskills)
+```
+Following is the table of the companies looking for three important technical skills python, sql, machine learning.
+
+
+# Conclusion:
+    Overall, I could conclusively say :  
+    1. States of Maharashtra, Karnataka and Delhi have the highest job concentration of data scientist jobs in India.  
+    2. Cities of Delhi (Delhi state), Banaglore(Karnataka state) and Mumbai(Maharshtra state) are the cities producing data scientist jobs in India.  
+   3.  Rinalytics Advisors, Mount Talent Consulting and Greenhandle have more openings for data scientist roles in India.  
+    4. Non-technical Skills like reuirement for such jobs are "analyse, reponsible,develop, build, predict". So these words should be included in the resume when applying for the data scientist position.  
+    5. Agencies like Staffio and Premium-jobs look for all three most important technical skills namely Python, SQL and Machine learning.If anyone is applying to an agency in Delhi city, must make sure is well versed with these technical skills.  
+    
+#Lessons Learned:
+
+1. Opportunities in using a second country like Canada to draw comparisons from my friend's current country to aid in answering a more compelling question "Is it worth immigrating from Canada to India in search of Data Scientist job?"
+ 2. Opportunities in finding data on the Data Scientist job numbers in India and Canada for conducting predictive analysis.
+3. Could have chosen a data set that had more numerical values over various periods to be able to use predictive modeling and data modeling.
+
+    
+
+
+
+
+
