@@ -16,8 +16,9 @@ options(max.print=999999)
 '''  
 
 # Capstone Project Overview
-This capstone project is about more analysis into data scientist roles in India.This project was taken up by the need of a dear friend wanting to move to India in search of data scientist roles in India.When people want to move from overseas back to India, they do not do proper research into the job scene in regards with the role they are seeking a career in. Taking into consideration hundreds of job sites in India, with results running into hundreds of pages adds to the daunting taks of getting a holistic picture of a paricular job related market.People do not do enough research into, which companies are hiring for a data scientist position; what locations have the highest density of data scientists roles; what companies are hiring; what cities will likely hire in the future etc. When the above questions are not researched properly, immigrants are usually stuck at locations that does not hire for the respective roles, or does not need data scientists.  
-The aim of this project is to be able to make informed decisions about taking up data scientist roles and take a scientific approach towards it. To aid in this decision-making, I will be exploring data through descriptive statistics and visualisations making use of various statistical tools including but not limited to histograms, bar plots etc. For data visualisations, I will be using ggplot 2 to help understand the significance of data by placing it in visual context.  **The goal of this project is to apply the principles of data science and develop insights from the analysis of structured or unstructured data to aid in better decision-making.**  
+This capstone project is about more analysis into data scientist roles in India.This project was taken up by the need for analysis into what courses in Data Science be promoted and where they should be marketed in India? Taking into consideration hundreds of job sites in India, with results running into hundreds of pages adds to the daunting taks of getting a holistic picture of a paricular job related market.Companies do not get enough time in data related research which leads to waste of marketing dollars. A lot of online data was sifted for e.g which companies are hiring for a data scientist position; what locations have the highest density of data scientists roles; what companies are hiring; what cities will likely hire in the future etc. 
+
+The aim of this project is to be able to make informed decisions to developed focused course strategy and marketing messages and take a scientific approach towards it. To aid in this decision-making, I will be exploring data through descriptive statistics and visualisations making use of various statistical tools including but not limited to histograms, bar plots etc. For data visualisations, I will be using ggplot 2 to help understand the significance of data by placing it in visual context.  **The goal of this project is to apply the principles of data science and develop insights from the analysis of structured or unstructured data to aid in better decision-making.**  
 The data set was extracted using an open API for the website [Indeed] (www.indeed.com).  
 
 # Overview of the Data Files
@@ -176,14 +177,9 @@ Following is the table of the companies looking for three important technical sk
     1. States of Maharashtra, Karnataka and Delhi have the highest job concentration of data scientist jobs in India.  
     2. Cities of Delhi (Delhi state), Banaglore(Karnataka state) and Mumbai(Maharshtra state) are the cities producing data scientist jobs in India.  
    3.  Rinalytics Advisors, Mount Talent Consulting and Greenhandle have more openings for data scientist roles in India.  
-    4. Non-technical Skills like reuirement for such jobs are "analyse, reponsible,develop, build, predict". So these words should be included in the resume when applying for the data scientist position.  
-    5. Agencies like Staffio and Premium-jobs look for all three most important technical skills namely Python, SQL and Machine learning.If anyone is applying to an agency in Delhi city, must make sure is well versed with these technical skills.  
+    4. Non-technical Skills like reuirement for such jobs are "analyse, reponsible,develop, build, predict". So these words should be included in the SEO pages/marketing initiatives when dveloping for the data science courses. 
+    5. Agencies like Staffio and Premium-jobs look for all three most important technical skills namely Python, SQL and Machine learning. These are the hiring partner BetterU should partner with.
     
-#Lessons Learned:
-
-1. Opportunities in using a second country like Canada to draw comparisons from my friend's current country to aid in answering a more compelling question "Is it worth immigrating from Canada to India in search of Data Scientist job?"
- 2. Opportunities in finding data on the Data Scientist job numbers in India and Canada for conducting predictive analysis.
-3. Could have chosen a data set that had more numerical values over various periods to be able to use predictive modeling and data modeling.
 
     
 
